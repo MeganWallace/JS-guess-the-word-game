@@ -20,7 +20,9 @@ const word = "magnolia";
 // empty array to hold guessed letters
 const guessedLetters = [];
 
-// ===================== Placeholder Function for Word in Progress ===================== (Primary function)
+
+// ===================== Placeholder Function for Word in Progress ===================== (Load function)
+// (only used once at page load, replaced by showCorrectLetters function after first guess is submitted)
 const placeholder = function (word) { //function to display placeholder symbols instead of letters for guess word
   const letters = []; //empty array to hold individual letters of word
   for (let letter of word) { //loops through each letter of word
@@ -66,7 +68,7 @@ const validateInput = function (input) {
   }
 };
 
-// ===================== Function to Capture Guess Input ===================== (Secondary function)
+// ===================== Function to Hold Guessed Letters ===================== (Secondary function)
 const makeGuess = function (guess) { //reuse "guess" variable from click event function
   guess = guess.toUpperCase(); //convert guess to uppercase
 
@@ -76,12 +78,13 @@ const makeGuess = function (guess) { //reuse "guess" variable from click event f
     guessedLetters.push(guess); //otherwise guess is added to guessedLetters array
     console.log(guessedLetters); //log guessedLetters array
 
-    showGuesses(guess); //run showGuesses function (ie. display guessed letters in guessed letters list)
+    showGuessedLetters(guess); //run showGuesses function (ie. display guessed letters in guessed letters list)
+    showCorrectLetters(guessedLetters) //run showCorrectLetters function (replaces initial placeholder function)
   }
 };
 
 // ===================== Function to Display Guessed Letters ===================== (Tertiary function)
-const showGuesses = function () {
+const showGuessedLetters = function () {
   guessedLettersList.innerHTML = ""; //clear guessed letters list
 
   for (const letter of guessedLetters) { //loop through each letter in guessedLetters array
@@ -91,4 +94,20 @@ const showGuesses = function () {
   }
 };
 
-// ===================== Function to Update Word in Progress ===================== (Tertiary function)
+// ===================== Function to Update Word in Progress ===================== (Tertiary function...replaces placeholder function)
+const showCorrectLetters = function (guessedLetters) {
+  const wordUpper = word.toUpperCase(); //convert word to uppercase
+  const wordArray = wordUpper.split(""); //split word into array of individual letters
+  // console.log(wordArray); //log out word array (placeholder)
+  const correctLetters = []; //empty array to hold correctly guessed letters (to be revealed)
+  for (let letter of wordArray) { //loops through each letter of word array
+    if (guessedLetters.includes(letter)) { //checks if guessed letters array contains any word array letters
+      correctLetters.push(letter); //if true, pushes letter to correctly letters array
+    } else {
+      correctLetters.push("●"); //if false, pushes ● placeholder to array
+    }
+    // } console.log(correctLetters); //logs correct letters array (placeholder)
+    wordProgress.innerText = correctLetters.join(""); //joins correct letters array into string and displays in browser (replacing initial placeholder function)
+  }
+};
+
