@@ -4,7 +4,7 @@ const guessedLetters = document.querySelector(".guessed-letters");
 //  Guess button:
 const guessButton = document.querySelector(".guess");
 // guess letter text input:
-const letterInput = document.querySelector("#letter");
+const letterInput = document.querySelector(".letter");
 // word progress paragraph:
 const wordProgress = document.querySelector(".word-in-progress");
 // remaining guesses counter paragraph:
@@ -29,6 +29,14 @@ const placeholder = function (word) { //function to display placeholder symbols 
 };
 
 placeholder(word); //calls placeholder function to display placeholder symbols in browser
+
+// ===================== Event Listener for Guess Button =====================
+guessButton.addEventListener("click", function (e) {
+  e.preventDefault(); //prevents the default form behavior of clicking a button, the form submitting, and then reloading the page...this allows the previously guessed letters to be kept
+  const input = letterInput.value; //captures the letter input box value
+  console.log(input); //logs the letter input value
+  letterInput.value = ""; //clears the letter input box
+});
 
 
 
