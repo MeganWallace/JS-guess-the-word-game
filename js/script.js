@@ -1,7 +1,7 @@
 // ======================== GLOBAL VARIABLES ========================
 // list for guessed letters:
 const guessedLetters = document.querySelector(".guessed-letters");
-//  Guess button:
+// guess button:
 const guessButton = document.querySelector(".guess");
 // guess letter text input:
 const letterInput = document.querySelector("#letter");
@@ -26,7 +26,7 @@ const placeholder = function (word) { //function to display placeholder symbols 
     console.log(letter); //log out individual letters (*does not add them to empty array)
     letters.push("●"); //adds ● to empty array for each letter
   }
-  wordProgress.innerText = letters.join(" "); //combines elements of letters array, separated by " ", into a string and displays them in the word-in-progress paragraph
+  wordProgress.innerText = letters.join(""); //combines elements of letters array, separated by "", into a string and displays them in the word-in-progress paragraph
 };
 
 placeholder(word); //calls placeholder function to display placeholder symbols in browser
@@ -34,10 +34,24 @@ placeholder(word); //calls placeholder function to display placeholder symbols i
 // ===================== Event Listener for Guess Button =====================
 guessButton.addEventListener("click", function (e) {
   e.preventDefault(); //prevents the default form behavior of clicking a button, the form submitting, and then reloading the page...this allows the previously guessed letters to be kept
-  const input = letterInput.value; //captures the letter input box value
-  console.log(input); //logs the letter input value
+  const guess = letterInput.value; //captures the letter input box value
+      // DON'T NEED ANYMORE --> console.log(guess); //logs the letter input value (placeholder)
   letterInput.value = ""; //clears the letter input box
 });
 
+// ===================== Function to Validate Player's Input =====================
+const validateInput = function (input) {
+  const acceptedLetter = /[a-zA-Z]/; //specifies a pattern of only letters (*regular expression*)
+
+  if (input === "") { //checks if input is empty
+  message.innerText = "Please enter a guess.";
+  } else if (input.length > 1) { //checks if input has more than one character
+  message.innerText = "Please only guess one letter at a time.";
+  } else if (input.match(acceptedLetter)===null) {  //checks if input doesn't match regular expression
+  message.innerText = "Please guess a letter from A to Z.";
+  } else {
+    return input; //returns input if good
+  }
+};
 
 
