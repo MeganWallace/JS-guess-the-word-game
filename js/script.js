@@ -37,6 +37,10 @@ guessButton.addEventListener("click", function (e) {
   const guess = letterInput.value; //captures the letter input box value
       // DON'T NEED ANYMORE --> console.log(guess); //logs the letter input value (placeholder)
   letterInput.value = ""; //clears the letter input box
+
+  message.innerText = ""; //clears the message paragraph
+  const validationResult = validateInput(guess); //validates letter input from player and assigns variable to result
+  console.log(validationResult); //logs validation result (placeholder)
 });
 
 // ===================== Function to Validate Player's Input =====================
@@ -44,14 +48,14 @@ const validateInput = function (input) {
   const acceptedLetter = /[a-zA-Z]/; //specifies a pattern of only letters (*regular expression*)
 
   if (input === "") { //checks if input is empty
+      // alt. solution code --> if (input.length === 0)
   message.innerText = "Please enter a guess.";
   } else if (input.length > 1) { //checks if input has more than one character
   message.innerText = "Please only guess one letter at a time.";
   } else if (input.match(acceptedLetter)===null) {  //checks if input doesn't match regular expression
+      // alt. solution code --> else if (!input.match(acceptedLetter))
   message.innerText = "Please guess a letter from A to Z.";
   } else {
     return input; //returns input if good
   }
 };
-
-
