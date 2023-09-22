@@ -5,7 +5,7 @@ const guessedLettersList = document.querySelector(".guessed-letters");
 const guessButton = document.querySelector(".guess");
 // guess letter text input:
 const letterInput = document.querySelector("#letter");
-// word progress paragraph:
+// word in progress paragraph:
 const wordProgress = document.querySelector(".word-in-progress");
 // remaining guesses counter paragraph:
 const remainingGuesses = document.querySelector(".remaining");
@@ -20,7 +20,7 @@ const word = "magnolia";
 // empty array to hold guessed letters
 const guessedLetters = [];
 
-// ===================== Placeholder Function for Word Letters =====================
+// ===================== Placeholder Function for Word in Progress ===================== (Primary function)
 const placeholder = function (word) { //function to display placeholder symbols instead of letters for guess word
   const letters = []; //empty array to hold individual letters of word
   for (let letter of word) { //loops through each letter of word
@@ -33,7 +33,7 @@ const placeholder = function (word) { //function to display placeholder symbols 
 placeholder(word); //calls placeholder function to display placeholder symbols in browser
 
 
-// ===================== Event Listener for Guess Button =====================
+// ===================== Event Listener for Guess Button ===================== (Primary function)
 guessButton.addEventListener("click", function (e) {
   e.preventDefault(); //prevents the default form behavior of clicking a button, the form submitting, and then reloading the page...this allows the previously guessed letters to be kept
   const guess = letterInput.value; //captures the letter input box value
@@ -43,38 +43,52 @@ guessButton.addEventListener("click", function (e) {
   const validationResult = validateInput(guess); //validates letter input from player and assigns variable to result
   // console.log(validationResult); //logs validation result (placeholder)
 
-  if (validationResult){ //if guess is valid (ie. validation results in a letter, not undefined)
-    makeGuess(guess); //run makeGuess function (ie. add to guessedLetters array or show try again message)
+  if (validationResult) { //if guess is valid (ie. validation results in a letter, not undefined)
+    makeGuess(guess); //run makeGuess function (ie. add to guessed letters list or show try again message)
   }
 });
 
 
-// ===================== Function to Validate Player's Input =====================
+// ===================== Function to Validate Player's Input ===================== (Secondary function)
 const validateInput = function (input) {
   const acceptedLetter = /[a-zA-Z]/; //specifies a pattern of only letters (*regular expression*)
 
   if (input === "") { //checks if input is empty
-        // alt. solution code --> if (input.length === 0)
+    // alt. solution code --> if (input.length === 0)
     message.innerText = "Please enter a guess."; //returns error message if true
   } else if (input.length > 1) { //checks if input has more than one character
     message.innerText = "Please only guess one letter at a time."; //returns error message if true
   } else if (input.match(acceptedLetter) === null) {  //checks if input doesn't match regular expression
-        // alt. solution code --> else if (!input.match(acceptedLetter))
+    // alt. solution code --> else if (!input.match(acceptedLetter))
     message.innerText = "Please guess a letter from A to Z."; //returns error message if true
   } else {
     return input; //otherwise returns input
   }
 };
 
-// ===================== Function to Capture Guess Input =====================
-
-const makeGuess = function(guess){ //reuse "guess" variable from click event function
+// ===================== Function to Capture Guess Input ===================== (Secondary function)
+const makeGuess = function (guess) { //reuse "guess" variable from click event function
   guess = guess.toUpperCase(); //convert guess to uppercase
 
-  if (guessedLetters.includes(guess)){ //if guessedLetters array includes the guess
+  if (guessedLetters.includes(guess)) { //if guessedLetters array includes the guess
     message.innerText = "You already guessed that letter! Try again."; //returns try again message
   } else {
     guessedLetters.push(guess); //otherwise guess is added to guessedLetters array
     console.log(guessedLetters); //log guessedLetters array
+
+    showGuesses(guess); //run showGuesses function (ie. display guessed letters in guessed letters list)
   }
 };
+
+// ===================== Function to Display Guessed Letters ===================== (Tertiary function)
+const showGuesses = function () {
+  guessedLettersList.innerHTML = ""; //clear guessed letters list
+
+  for (const letter of guessedLetters) { //loop through each letter in guessedLetters array
+    let li = document.createElement("li"); //create a list item for letter
+    li.innerText = letter; //set list item text value to letter
+    guessedLettersList.append(li); //add list item to guessed letters list
+  }
+};
+
+// ===================== Function to Update Word in Progress ===================== (Tertiary function)
