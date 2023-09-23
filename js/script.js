@@ -8,7 +8,7 @@ const letterInput = document.querySelector("#letter");
 // word in progress paragraph:
 const wordProgress = document.querySelector(".word-in-progress");
 // remaining guesses counter paragraph:
-const remainingGuesses = document.querySelector(".remaining");
+const remainingGuessDisplay = document.querySelector(".remaining");
 // remaining guesses counter span:
 const guessCounter = document.querySelector(".remaining span");
 // guess message paragraph:
@@ -19,6 +19,8 @@ const playAgain = document.querySelector(".play-again");
 const word = "magnolia";
 // empty array to hold guessed letters
 const guessedLetters = [];
+// number of remaining guesses (8 is max, number will change over time)
+let remainingGuesses = 8
 
 
 // ===================== Placeholder Function for Word in Progress ===================== (Load function)
