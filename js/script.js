@@ -51,7 +51,7 @@ guessButton.addEventListener("click", function (e) {
 });
 
 
-// ===================== Function to Validate Player's Input ===================== (Secondary function)
+// ===================== Function to Validate Player's Input ===================== (Secondary function > guessButton click)
 const validateInput = function (input) {
   const acceptedLetter = /[a-zA-Z]/; //specifies a pattern of only letters (*regular expression*)
 
@@ -68,7 +68,7 @@ const validateInput = function (input) {
   }
 };
 
-// ===================== Function to Hold Guessed Letters ===================== (Secondary function)
+// ===================== Function to Hold Guessed Letters ===================== (Secondary function > guessButton click)
 const makeGuess = function (guess) { //reuse "guess" variable from click event function
   guess = guess.toUpperCase(); //convert guess to uppercase
 
@@ -79,11 +79,11 @@ const makeGuess = function (guess) { //reuse "guess" variable from click event f
     console.log(guessedLetters); //log guessedLetters array
 
     showGuessedLetters(guess); //run showGuesses function (ie. display guessed letters in guessed letters list)
-    showCorrectLetters(guessedLetters) //run showCorrectLetters function (replaces initial placeholder function)
+    showCorrectLetters(guessedLetters); //run showCorrectLetters function (replaces initial placeholder function)
   }
 };
 
-// ===================== Function to Display Guessed Letters ===================== (Tertiary function)
+// ===================== Function to Display Guessed Letters ===================== (Tertiary function >> makeGuess)
 const showGuessedLetters = function () {
   guessedLettersList.innerHTML = ""; //clear guessed letters list
 
@@ -94,7 +94,7 @@ const showGuessedLetters = function () {
   }
 };
 
-// ===================== Function to Update Word in Progress ===================== (Tertiary function...replaces placeholder function)
+// ===================== Function to Update Word in Progress ===================== (Tertiary function >> makeGuess...replaces placeholder function)
 const showCorrectLetters = function (guessedLetters) {
   const wordUpper = word.toUpperCase(); //convert word to uppercase
   const wordArray = wordUpper.split(""); //split word into array of individual letters
@@ -107,7 +107,15 @@ const showCorrectLetters = function (guessedLetters) {
       correctLetters.push("●"); //if false, pushes ● placeholder to array
     }
     // } console.log(correctLetters); //logs correct letters array (placeholder)
-    wordProgress.innerText = correctLetters.join(""); //joins correct letters array into string and displays in browser (replacing initial placeholder function)
   }
+  wordProgress.innerText = correctLetters.join(""); //joins correct letters array into string and displays in browser (replacing initial placeholder function)
+  checkWin(); //if word is correct, runs checkWin function
 };
 
+// ===================== Function to Check if Player Won ===================== (Quaternary function >>> showCorrectLetters)
+const checkWin = function () {
+  if (word.toUpperCase() === wordProgress.innerText){ //check if the word (JS is case sensitive, need to make upper) matches players word in progress (need to check actual text of wordProgress paragraph)
+    message.classList.add("win"); //adds win class to message
+    message.innerHTML = '<p class="highlight">You guessed the correct word! Congrats!</p>' //updates message paragraph
+  }
+};
