@@ -15,12 +15,14 @@ const guessCounter = document.querySelector(".remaining span");
 const message = document.querySelector(".message");
 // play again button:
 const playAgain = document.querySelector(".play-again");
-// starting word:
-const word = "magnolia";
-// empty array to hold guessed letters
+
+
+// word (this will change):
+let word = "magnolia";
+// empty array to hold guessed letters:
 const guessedLetters = [];
-// number of remaining guesses (8 is max, number will change over time)
-let remainingGuesses = 8
+// number of remaining guesses (8 is max, number will change over time):
+let remainingGuesses = 8;
 
 
 // ===================== Placeholder Function for Word in Progress ===================== (Load function)
@@ -81,6 +83,7 @@ const makeGuess = function (guess) { //reuse "guess" variable from click event f
     console.log(guessedLetters); //log guessedLetters array
 
     showGuessedLetters(guess); //run showGuesses function (ie. display guessed letters in guessed letters list)
+    updateRemainingGuesses(guess); //runs updateRemainingGuesses function (ie. update on screen guess counter)
     showCorrectLetters(guessedLetters); //run showCorrectLetters function (replaces initial placeholder function)
   }
 };
@@ -112,6 +115,27 @@ const showCorrectLetters = function (guessedLetters) {
   }
   wordProgress.innerText = correctLetters.join(""); //joins correct letters array into string and displays in browser (replacing initial placeholder function)
   checkWin(); //if word is correct, runs checkWin function
+};
+
+// ===================== Function to Count Remaining Guesses ===================== 
+const updateRemainingGuesses = function (guess){
+  const upperWord = word.toUpperCase(); //convert word to uppercase for comparison
+
+  if (!upperWord.includes(guess)){ //if word does not include guess:
+    message.innerText = `Sorry, the word does not contain the letter ${guess}.`; //update message and...
+    remainingGuesses -= 1; //...subtract 1 from remaining guesses value (don't need new variable because let was used)
+  } else { //otherwise:
+    message.innerText = `Great guess! The letter ${guess} is part of the word.`; //update message
+  }
+
+  if (remainingGuesses === 0){ //if remaining guesses is 0:
+    message.innerText = `Game over! The word was ${word}.`; //show game over message and...
+    guessCounter.innerText = `${remainingGuesses} guesses`; //...update guess counter
+  } else if (remainingGuesses === 1) { //if remaining guesses is 1:
+    guessCounter.innerText = `${remainingGuesses} guess`; //update guess counter
+  } else { //otherwise:
+    guessCounter.innerText = `${remainingGuesses} guesses`; //update guess counter
+  }
 };
 
 // ===================== Function to Check if Player Won ===================== (Quaternary function >>> showCorrectLetters)
