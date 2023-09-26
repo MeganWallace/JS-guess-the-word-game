@@ -143,7 +143,8 @@ const updateRemainingGuesses = function (guess){
 
   if (remainingGuesses === 0){ //if remaining guesses is 0:
     message.innerText = `Game over! The word was ${word}.`; //show game over message and...
-    guessCounter.innerText = `${remainingGuesses} guesses`; //...update guess counter
+    guessCounter.innerText = `${remainingGuesses} guesses`; //...update guess counter and...
+    startOver(); //...shows play again button to reset game
   } else if (remainingGuesses === 1) { //if remaining guesses is 1:
     guessCounter.innerText = `${remainingGuesses} guess`; //update guess counter
   } else { //otherwise:
@@ -156,5 +157,16 @@ const checkWin = function () {
   if (word.toUpperCase() === wordProgress.innerText){ //check if the word (JS is case sensitive, need to make upper) matches players word in progress (need to check actual text of wordProgress paragraph)
     message.classList.add("win"); //adds win class to message
     message.innerHTML = '<p class="highlight">You guessed the correct word! Congrats!</p>'; //updates message paragraph
+    startOver(); //shows play again button to reset game
   }
 };
+
+// ===================== Function to Show Play Again Button/Reset Game ===================== (Quaternary/Quinary function >>> updateRemainingGuesses/checkWin)
+const startOver = function(){
+  guessButton.classList.add("hide"); //hides guess button
+  remainingGuessDisplay.classList.add("hide"); //hides remaining guesses message
+  guessedLettersList.classList.add("hide"); //hides guessed letters list
+
+  playAgain.classList.remove("hide"); //displays play again button
+}
+
