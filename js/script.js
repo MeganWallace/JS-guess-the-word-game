@@ -28,14 +28,10 @@ let remainingGuesses = 8;
 const getWord = async function () {
   const request = await fetch("https://gist.githubusercontent.com/skillcrush-curriculum/7061f1d4d3d5bfe47efbfbcfe42bf57e/raw/5ffc447694486e7dea686f34a6c085ae371b43fe/words.txt"); //fetch words text file
   const words = await request.text(); //parse and hold text data (list of words)
-  // console.log(words); //log out words
   const wordArray = words.split("\n"); //turn text data into an array...split() separates each word with a newline/line break ("\n")
-  // console.log(wordArray); //log out word array
 
   const randomIndex = Math.floor(Math.random() * wordArray.length); //generates random index number from word array
-  // console.log(randomIndex); //log out random index number
   word = wordArray[randomIndex].trim(); //pulls random word from word array and assigns it as word variable (word to be guessed)...trim() removes any whitespace
-  // console.log(word); //log out random word
   placeholder(word); //applies placeholder function to random word (ie. replaces word letters with symbols)
 };
 
@@ -46,7 +42,7 @@ getWord(); //launches new random word
 const placeholder = function (word) { //function to display placeholder symbols instead of letters for guess word
   const letters = []; //empty array to hold individual letters of word
   for (const letter of word) { //loops through each letter of word
-    console.log(letter); //log out individual letters (*does not add them to empty array)
+    // console.log(letter); //log out individual letters (*does not add them to empty array)
     letters.push("●"); //adds ● to empty array for each letter
   }
   wordProgress.innerText = letters.join(""); //combines elements of letters array, separated by "", into a string and displays them in the word-in-progress paragraph
@@ -60,7 +56,6 @@ guessButton.addEventListener("click", function (e) {
 
   message.innerText = ""; //clears the message paragraph
   const validationResult = validateInput(guess); //validates letter input from player and assigns variable to result
-  // console.log(validationResult); //logs validation result (placeholder)
 
   if (validationResult) { //if guess is valid (ie. validation results in a letter, not undefined)
     makeGuess(guess); //run makeGuess function (ie. add to guessed letters list or show try again message)
@@ -72,13 +67,11 @@ guessButton.addEventListener("click", function (e) {
 const validateInput = function (input) {
   const acceptedLetter = /[a-zA-Z]/; //specifies a pattern of only letters (*regular expression*)
 
-  if (input === "") { //checks if input is empty
-    // alt. solution code --> if (input.length === 0)
+  if (input === "") { //checks if input is empty...alt. solution code --> if (input.length === 0)
     message.innerText = "Please enter a guess."; //returns error message if true
   } else if (input.length > 1) { //checks if input has more than one character
     message.innerText = "Please only guess one letter at a time."; //returns error message if true
-  } else if (input.match(acceptedLetter) === null) {  //checks if input doesn't match regular expression
-    // alt. solution code --> else if (!input.match(acceptedLetter))
+  } else if (input.match(acceptedLetter) === null) {  //checks if input doesn't match regular expression...alt. solution code --> else if (!input.match(acceptedLetter))
     message.innerText = "Please guess a letter from A to Z."; //returns error message if true
   } else {
     return input; //otherwise returns input
@@ -93,7 +86,7 @@ const makeGuess = function (guess) { //reuse "guess" variable from click event f
     message.innerText = "You already guessed that letter! Try again."; //returns try again message
   } else {
     guessedLetters.push(guess); //otherwise guess is added to guessedLetters array
-    console.log(guessedLetters); //log guessedLetters array
+    // console.log(guessedLetters); //log guessedLetters array
 
     showGuessedLetters(guess); //run showGuesses function (ie. display guessed letters in guessed letters list)
     updateRemainingGuesses(guess); //runs updateRemainingGuesses function (ie. update on screen guess counter)
@@ -116,7 +109,6 @@ const showGuessedLetters = function () {
 const showCorrectLetters = function (guessedLetters) {
   const wordUpper = word.toUpperCase(); //convert word to uppercase
   const wordArray = wordUpper.split(""); //split word into array of individual letters
-  // console.log(wordArray); //log out word array (placeholder)
   const correctLetters = []; //empty array to hold correctly guessed letters (to be revealed)
   for (const letter of wordArray) { //loops through each letter of word array
     if (guessedLetters.includes(letter)) { //checks if guessed letters array contains any word array letters
@@ -124,7 +116,6 @@ const showCorrectLetters = function (guessedLetters) {
     } else {
       correctLetters.push("●"); //if false, pushes ● placeholder to array
     }
-    // } console.log(correctLetters); //logs correct letters array (placeholder)
   }
   wordProgress.innerText = correctLetters.join(""); //joins correct letters array into string and displays in browser (replacing initial placeholder function)
   checkWin(); //if word is correct, runs checkWin function
