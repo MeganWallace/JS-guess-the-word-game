@@ -18,14 +18,14 @@ const playAgain = document.querySelector(".play-again");
 
 // word (this will change):
 let word = "magnolia";
-// empty array to hold guessed letters:
-const guessedLetters = [];
+// empty array to hold guessed letters (the letters will change):
+let guessedLetters = []; 
 // number of remaining guesses (8 is max, number will change over time):
 let remainingGuesses = 8;
 
 
 // ===================== Async Function to Fetch Words ===================== (Primary function)
-const getWord = async function(){
+const getWord = async function () {
   const request = await fetch("https://gist.githubusercontent.com/skillcrush-curriculum/7061f1d4d3d5bfe47efbfbcfe42bf57e/raw/5ffc447694486e7dea686f34a6c085ae371b43fe/words.txt"); //fetch words text file
   const words = await request.text(); //parse and hold text data (list of words)
   // console.log(words); //log out words
@@ -45,14 +45,14 @@ getWord(); //launches new random word
 // (only used once on page load/new word, replaced by showCorrectLetters function after first guess is submitted)
 const placeholder = function (word) { //function to display placeholder symbols instead of letters for guess word
   const letters = []; //empty array to hold individual letters of word
-  for (let letter of word) { //loops through each letter of word
+  for (const letter of word) { //loops through each letter of word
     console.log(letter); //log out individual letters (*does not add them to empty array)
     letters.push("●"); //adds ● to empty array for each letter
   }
   wordProgress.innerText = letters.join(""); //combines elements of letters array, separated by "", into a string and displays them in the word-in-progress paragraph
 };
 
-// ===================== Event Listener for Guess Button ===================== (Primary function)
+// ===================== Click Event Listener for Guess Button ===================== (Primary function)
 guessButton.addEventListener("click", function (e) {
   e.preventDefault(); //prevents the default form behavior of clicking a button, the form submitting, and then reloading the page...this allows the previously guessed letters to be kept
   const guess = letterInput.value; //captures the letter input box value
@@ -118,7 +118,7 @@ const showCorrectLetters = function (guessedLetters) {
   const wordArray = wordUpper.split(""); //split word into array of individual letters
   // console.log(wordArray); //log out word array (placeholder)
   const correctLetters = []; //empty array to hold correctly guessed letters (to be revealed)
-  for (let letter of wordArray) { //loops through each letter of word array
+  for (const letter of wordArray) { //loops through each letter of word array
     if (guessedLetters.includes(letter)) { //checks if guessed letters array contains any word array letters
       correctLetters.push(letter); //if true, pushes letter to correctly letters array
     } else {
@@ -131,17 +131,17 @@ const showCorrectLetters = function (guessedLetters) {
 };
 
 // ===================== Function to Count Remaining Guesses ===================== (Tertiary function >> makeGuess)
-const updateRemainingGuesses = function (guess){
+const updateRemainingGuesses = function (guess) {
   const upperWord = word.toUpperCase(); //convert word to uppercase for comparison
 
-  if (!upperWord.includes(guess)){ //if word does not include guess:
+  if (!upperWord.includes(guess)) { //if word does not include guess:
     message.innerText = `Sorry, the word does not contain the letter ${guess}.`; //update message and...
     remainingGuesses -= 1; //...subtract 1 from remaining guesses value (don't need new variable because let was used)
   } else { //otherwise:
     message.innerText = `Great guess! The letter ${guess} is part of the word.`; //update message
   }
 
-  if (remainingGuesses === 0){ //if remaining guesses is 0:
+  if (remainingGuesses === 0) { //if remaining guesses is 0:
     message.innerText = `Game over! The word was ${word}.`; //show game over message and...
     guessCounter.innerText = `${remainingGuesses} guesses`; //...update guess counter and...
     startOver(); //...shows play again button to reset game
@@ -154,7 +154,7 @@ const updateRemainingGuesses = function (guess){
 
 // ===================== Function to Check if Player Won ===================== (Quaternary function >>> showCorrectLetters)
 const checkWin = function () {
-  if (word.toUpperCase() === wordProgress.innerText){ //check if the word (JS is case sensitive, need to make upper) matches players word in progress (need to check actual text of wordProgress paragraph)
+  if (word.toUpperCase() === wordProgress.innerText) { //check if the word (JS is case sensitive, need to make upper) matches players word in progress (need to check actual text of wordProgress paragraph)
     message.classList.add("win"); //adds win class to message
     message.innerHTML = '<p class="highlight">You guessed the correct word! Congrats!</p>'; //updates message paragraph
     startOver(); //shows play again button to reset game
@@ -162,11 +162,27 @@ const checkWin = function () {
 };
 
 // ===================== Function to Show Play Again Button/Reset Game ===================== (Quaternary/Quinary function >>> updateRemainingGuesses/checkWin)
-const startOver = function(){
+const startOver = function () {
   guessButton.classList.add("hide"); //hides guess button
   remainingGuessDisplay.classList.add("hide"); //hides remaining guesses message
   guessedLettersList.classList.add("hide"); //hides guessed letters list
 
   playAgain.classList.remove("hide"); //displays play again button
-}
+};
 
+// ===================== Click Event Listener for Play Again Button ===================== (Primary function)
+playAgain.addEventListener("click", function () {
+  message.classList.remove("win"); //removes "win" formatting from message
+  message.innerText = ""; //clears message text
+  guessedLettersList.innerHTML = ""; //clears guessed letters list
+  remainingGuesses = 8; //resets number of guesses
+  guessCounter.innerText = `${remainingGuesses} guesses`; //resets guess counter
+  guessedLetters = []; //resets guessed letters array
+
+  guessButton.classList.remove("hide"); //displays guess button
+  remainingGuessDisplay.classList.remove("hide"); //displays remaining guesses message
+  guessedLettersList.classList.remove("hide"); //displays guessed letters list
+  playAgain.classList.add("hide"); //hides play again button
+
+  getWord(); //launches new random word
+});
