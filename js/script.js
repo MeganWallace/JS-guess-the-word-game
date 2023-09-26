@@ -16,7 +16,6 @@ const message = document.querySelector(".message");
 // play again button:
 const playAgain = document.querySelector(".play-again");
 
-
 // word (this will change):
 let word = "magnolia";
 // empty array to hold guessed letters:
@@ -25,8 +24,25 @@ const guessedLetters = [];
 let remainingGuesses = 8;
 
 
-// ===================== Placeholder Function for Word in Progress ===================== (Load function)
-// (only used once at page load, replaced by showCorrectLetters function after first guess is submitted)
+// ===================== Async Function to Fetch Words ===================== (Primary function)
+const getWord = async function(){
+  const request = await fetch("https://gist.githubusercontent.com/skillcrush-curriculum/7061f1d4d3d5bfe47efbfbcfe42bf57e/raw/5ffc447694486e7dea686f34a6c085ae371b43fe/words.txt"); //fetch words text file
+  const words = await request.text(); //parse and hold text data (list of words)
+  // console.log(words); //log out words
+  const wordArray = words.split("\n"); //turn text data into an array...split() separates each word with a newline/line break ("\n")
+  // console.log(wordArray); //log out word array
+
+  const randomIndex = Math.floor(Math.random() * wordArray.length); //generates random index number from word array
+  // console.log(randomIndex); //log out random index number
+  word = wordArray[randomIndex].trim(); //pulls random word from word array and assigns it as word variable (word to be guessed)...trim() removes any whitespace
+  // console.log(word); //log out random word
+  placeholder(word); //applies placeholder function to random word (ie. replaces word letters with symbols)
+};
+
+getWord(); //launches new random word
+
+// ===================== Placeholder Function for Word in Progress ===================== (Secondary function > getWord)
+// (only used once on page load/new word, replaced by showCorrectLetters function after first guess is submitted)
 const placeholder = function (word) { //function to display placeholder symbols instead of letters for guess word
   const letters = []; //empty array to hold individual letters of word
   for (let letter of word) { //loops through each letter of word
@@ -35,9 +51,6 @@ const placeholder = function (word) { //function to display placeholder symbols 
   }
   wordProgress.innerText = letters.join(""); //combines elements of letters array, separated by "", into a string and displays them in the word-in-progress paragraph
 };
-
-placeholder(word); //calls placeholder function to display placeholder symbols in browser
-
 
 // ===================== Event Listener for Guess Button ===================== (Primary function)
 guessButton.addEventListener("click", function (e) {
@@ -117,7 +130,7 @@ const showCorrectLetters = function (guessedLetters) {
   checkWin(); //if word is correct, runs checkWin function
 };
 
-// ===================== Function to Count Remaining Guesses ===================== 
+// ===================== Function to Count Remaining Guesses ===================== (Tertiary function >> makeGuess)
 const updateRemainingGuesses = function (guess){
   const upperWord = word.toUpperCase(); //convert word to uppercase for comparison
 
@@ -142,6 +155,6 @@ const updateRemainingGuesses = function (guess){
 const checkWin = function () {
   if (word.toUpperCase() === wordProgress.innerText){ //check if the word (JS is case sensitive, need to make upper) matches players word in progress (need to check actual text of wordProgress paragraph)
     message.classList.add("win"); //adds win class to message
-    message.innerHTML = '<p class="highlight">You guessed the correct word! Congrats!</p>' //updates message paragraph
+    message.innerHTML = '<p class="highlight">You guessed the correct word! Congrats!</p>'; //updates message paragraph
   }
 };
